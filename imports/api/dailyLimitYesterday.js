@@ -26,7 +26,8 @@ if (Meteor.isServer) {
                 timeout: 15000,
                 ignoreHTTPSErrors: true,
                 devtools: false,
-                headless: true
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox'],
             });
 
             const searchPage = await browser.newPage();
