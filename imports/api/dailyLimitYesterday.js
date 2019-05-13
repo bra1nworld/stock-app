@@ -2,8 +2,6 @@ import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";
 import * as fs from "fs";
 import * as path from "path";
-
-import { oldData } from "../oldData";
 const puppeteer = require("puppeteer");
 const Settings = {
     firstSearchUrl: `http://1.push2his.eastmoney.com/api/qt/stock/trends2/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58&ut=fa5fd1943c7b386f172d6893dbfba10b&iscr=0&ndays=1&secid=90.BK0815&cb=jQuery183010876406714142406_1556033065016&_=1556033065316`
