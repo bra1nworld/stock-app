@@ -76,8 +76,7 @@ if (Meteor.isServer) {
                         goPage(searchPage, `${Settings.firstSearchUrl}`);
                     }, 30000);
                 } else {
-                    //now < todayUpdateLastTime
-                    if (now > todayUpdateLastTime) {
+                    if (now > todayEnd && now < todayUpdateLastTime) {
                         const dataArr = DailyLimit.find({}).fetch();
                         dataArr.forEach(data => {
                             delete data._id;
