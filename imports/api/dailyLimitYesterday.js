@@ -1,11 +1,21 @@
 import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
+import * as fs from "fs";
+import * as path from "path";
+
 import { oldData } from "../oldData";
 const puppeteer = require("puppeteer");
 const Settings = {
     firstSearchUrl: `http://1.push2his.eastmoney.com/api/qt/stock/trends2/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58&ut=fa5fd1943c7b386f172d6893dbfba10b&iscr=0&ndays=1&secid=90.BK0815&cb=jQuery183010876406714142406_1556033065016&_=1556033065316`
 };
+const absPath = path.resolve("./");
+console.log("absPath.indexOf(root)");
+console.log(absPath.indexOf("root"));
+
+const startDateHour = absPath.indexOf("root") > 0 ? 1 : 9;
+const backupDataPath =
+    absPath.slice(0, absPath.indexOf(".meteor")) + "testStock.txt";
 
 export const DailyLimit = new Mongo.Collection("dailyLimit");
 
@@ -16,9 +26,16 @@ if (Meteor.isServer) {
     const allDataLen = DailyLimit.find({}).count();
 
     if (allDataLen === 0) {
-        for (let item of oldData) {
-            DailyLimit.insert(item);
-        }
+        fs.readFile(backupDataPath, (err, result) => {
+            if (err || !result) {
+                console.log(err);
+                return;
+            }
+            const oldData = JSON.parse(result.toString());
+            for (let item of oldData) {
+                DailyLimit.insert(item);
+            }
+        });
     } else {
         (async () => {
             let browser = await puppeteer.launch({
@@ -38,14 +55,38 @@ if (Meteor.isServer) {
                 updateDailyLimitYesterday(resJson.data);
 
                 const now = Date.now();
-                let todayStart = new Date(now).setHours(1, 25, 0, 0);
-                let todayEnd = new Date(now).setHours(7, 00, 0, 0);
+                let todayStart = new Date(now).setHours(
+                    startDateHour,
+                    25,
+                    0,
+                    0
+                );
+                let todayEnd = new Date(now).setHours(
+                    startDateHour + 6,
+                    00,
+                    0,
+                    0
+                );
+                let todayUpdateLastTime = new Date(now).setHours(
+                    startDateHour + 6,
+                    10,
+                    0,
+                    0
+                );
 
                 if (now > todayStart && now < todayEnd) {
                     setTimeout(() => {
                         goPage(searchPage, `${Settings.firstSearchUrl}`);
                     }, 30000);
                 } else {
+                    //now < todayUpdateLastTime
+                    if (now > todayUpdateLastTime) {
+                        const dataArr = DailyLimit.find({}).fetch();
+                        dataArr.forEach(data => {
+                            delete data._id;
+                        });
+                        updateBackupData(dataArr);
+                    }
                     setTimeout(() => {
                         goPage(searchPage, `${Settings.firstSearchUrl}`);
                     }, 5 * 60000);
@@ -68,6 +109,18 @@ if (Meteor.isServer) {
                 }, 30000);
             }
         }
+    }
+    function updateBackupData(arr) {
+        fs.writeFile(backupDataPath, JSON.stringify(arr), function(
+            err,
+            result
+        ) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(result);
+        });
     }
 
     function updateDailyLimitYesterday(data) {

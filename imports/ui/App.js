@@ -1,181 +1,188 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { withTracker } from "meteor/react-meteor-data";
 import { DailyLimit } from "../api/dailyLimitYesterday";
 import { Meteor } from "meteor/meteor";
-import ReactEcharts from 'echarts-for-react';
+import ReactEcharts from "echarts-for-react";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
+    }
 
-  }
+    renderDailyLimit() {}
 
+    componentDidMount() {}
 
-  renderDailyLimit() {
+    getOptions = () => {
+        if (this.props.dailyLimit.length === 0) return null;
+        const allDailyLimits = this.props.dailyLimit;
 
-  }
+        if (allDailyLimits.length < 1) return null;
+        const xData = [];
+        const valueData = [];
+        allDailyLimits.forEach((limit, index) => {
+            const { date, preClose, trends } = limit;
 
-  componentDidMount() {
-  }
-
-  getOptions = () => {
-    if (this.props.dailyLimit.length === 0) return null
-    const allDailyLimits = this.props.dailyLimit
-
-    if (allDailyLimits.length < 1) return null
-    const xData = []
-    const valueData = []
-    allDailyLimits.forEach((limit, index) => {
-      const { date, preClose, trends } = limit;
-
-      trends.forEach(item => {
-        const arr = item.split(',');
-        const targetValue = arr[1] * 1 < 1 ? arr[2] * 1 : arr[1] * 1
-        const value = ((targetValue - preClose) / preClose * 100).toFixed(2) * 1
-        valueData.push({
-          value,
-          name: arr[0],
-          itemStyle: {
-            opacity: 0
-          },
-        });
-      })
-      for (let i = 0; i < 241; i++) {
-        xData.push(date + '')
-      }
-    })
-
-
-    return {
-      title: { text: '昨日涨停xxx' },
-      tooltip: {
-        trigger: 'axis',
-        confine: true,
-        formatter: (params) => {
-          const { data: { name, value } } = params[0];
-          const color = value > 0 ? '#FF0000' : '#00FF00'
-          return `<span style="color:${color}">时间:${name}<br/>振幅:${value}</span>`
-        }
-      },
-      xAxis: {
-        splitLine: {
-          show: false
-        },
-        boundaryGap: true,
-        axisLabel: {
-          interval: (index) => {
-            if ((index - 120) % 241 === 0) {
-              return true
-            } else {
-              return false
+            trends.forEach(item => {
+                const arr = item.split(",");
+                const targetValue = arr[1] * 1 < 1 ? arr[2] * 1 : arr[1] * 1;
+                const value =
+                    (((targetValue - preClose) / preClose) * 100).toFixed(2) *
+                    1;
+                valueData.push({
+                    value,
+                    name: arr[0],
+                    itemStyle: {
+                        opacity: 0
+                    }
+                });
+            });
+            for (let i = 0; i < 241; i++) {
+                xData.push(date + "");
             }
-          },
-          aligh: 'center'
-        },
-        data: xData
-      },
-      yAxis: {
-        type: 'value',
-        min: -10,
-        max: 10,
-        boundaryGap: false,
-        interval: 2,
-        splitLine: {
-          show: true,
-          lineStyle: {
-            opacity: 0.3
-          }
-        }
-      },
-      visualMap: {
-        show: false,
-        pieces: [{
-          lte: -4,
-          color: '#00FF00'
-        }, {
-          gt: -4,
-          lte: -2,
-          color: '#008B00'
-        }, {
-          gt: -2,
-          lte: 0,
-          color: '#00FF00'
-        }, {
-          gt: 0,
-          lte: 2,
-          color: '#ff8629'
-        }, {
-          gt: 2,
-          lte: 4,
-          color: '#FF0000'
-        }, {
-          gt: 4,
-          color: '#d10592'
-        }],
-      },
-      series: [{
-        name: '数据',
-        type: 'line',
-        data: valueData
-      }]
-    };
-  }
+        });
 
-  render() {
-    return (
-      this.getOptions() ?
-        <ReactEcharts
-          option={this.getOptions()}
-          style={{ height: '600px', width: '1800px' }}
-          className='react_for_echarts' />
-        : <div></div>
-    );
-  }
+        return {
+            title: { text: "昨日涨停指数" },
+            tooltip: {
+                trigger: "axis",
+                confine: true,
+                formatter: params => {
+                    const {
+                        data: { name, value }
+                    } = params[0];
+                    const color = value > 0 ? "#FF0000" : "#00FF00";
+                    return `<span style="color:${color}">时间:${name}<br/>振幅:${value}</span>`;
+                }
+            },
+            xAxis: {
+                splitLine: {
+                    show: false
+                },
+                boundaryGap: true,
+                axisLabel: {
+                    interval: index => {
+                        if ((index - 120) % 241 === 0) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                    aligh: "center"
+                },
+                data: xData
+            },
+            yAxis: {
+                type: "value",
+                min: -10,
+                max: 10,
+                boundaryGap: false,
+                interval: 2,
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        opacity: 0.3
+                    }
+                }
+            },
+            visualMap: {
+                show: false,
+                pieces: [
+                    {
+                        lte: -4,
+                        color: "#00FF00"
+                    },
+                    {
+                        gt: -4,
+                        lte: -2,
+                        color: "#008B00"
+                    },
+                    {
+                        gt: -2,
+                        lte: 0,
+                        color: "#00FF00"
+                    },
+                    {
+                        gt: 0,
+                        lte: 2,
+                        color: "#ff8629"
+                    },
+                    {
+                        gt: 2,
+                        lte: 4,
+                        color: "#FF0000"
+                    },
+                    {
+                        gt: 4,
+                        color: "#d10592"
+                    }
+                ]
+            },
+            series: [
+                {
+                    name: "数据",
+                    type: "line",
+                    data: valueData
+                }
+            ]
+        };
+    };
+
+    render() {
+        return this.getOptions() ? (
+            <ReactEcharts
+                option={this.getOptions()}
+                style={{ height: "600px", width: "1800px" }}
+                className="react_for_echarts"
+            />
+        ) : (
+            <div />
+        );
+    }
 }
 
 export default withTracker(() => {
-  Meteor.subscribe('dailyLimit')
-  return {
-    dailyLimit: DailyLimit.find({}).fetch(),
-  }
-})(App)
-   // <div>({curTrend.date})</div>
-        // <div>({curTrend.preClose})</div>
+    Meteor.subscribe("dailyLimit");
+    return {
+        dailyLimit: DailyLimit.find({}).fetch()
+    };
+})(App);
+// <div>({curTrend.date})</div>
+// <div>({curTrend.preClose})</div>
 
-        // <div>({curTrend.trends.length})</div>
+// <div>({curTrend.trends.length})</div>
 // <div className="container">
-      // <header>
-      //   <h1>Todo List ({this.props.incompleteCount})</h1>
+// <header>
+//   <h1>Todo List ({this.props.incompleteCount})</h1>
 
-      //   <label className='hide-completed'>
-      //     <input
-      //       type='checkbox'
-      //       readOnly
-      //       checked={this.state.hideCompleted}
-      //       onClick={this.toggleHideCompleted}
-      //     />
-      //   </label>
+//   <label className='hide-completed'>
+//     <input
+//       type='checkbox'
+//       readOnly
+//       checked={this.state.hideCompleted}
+//       onClick={this.toggleHideCompleted}
+//     />
+//   </label>
 
+//   <AccountsUIWrapper />
 
-      //   <AccountsUIWrapper />
+//   {
+//     this.props.currentUser ?
 
-      //   {
-      //     this.props.currentUser ?
+//       <form className='new-task' onSubmit={this.handleSubmit}>
+//         <input
+//           type='text'
+//           ref='textInput'
+//           placeholder='Type to add new tasks'
+//         />
+//       </form>
+//       : ''
+//   }
 
-      //       <form className='new-task' onSubmit={this.handleSubmit}>
-      //         <input
-      //           type='text'
-      //           ref='textInput'
-      //           placeholder='Type to add new tasks'
-      //         />
-      //       </form>
-      //       : ''
-      //   }
+// </header>
 
-      // </header>
-
-      // <ul>
-      //   {this.renderTasks()}
-      // </ul>
-      // </div></div>
+// <ul>
+//   {this.renderTasks()}
+// </ul>
+// </div></div>
