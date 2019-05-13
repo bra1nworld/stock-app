@@ -39,15 +39,15 @@ if (Meteor.isServer) {
                 updateDailyLimitYesterday(resJson.data)
 
                 const now = Date.now();
-                let todayStart = new Date(now).setHours(9, 25, 0, 0);
-                let todayEnd = new Date(now).setHours(15, 00, 0, 0);
+                let todayStart = new Date(now).setHours(1, 25, 0, 0);
+                let todayEnd = new Date(now).setHours(7, 00, 0, 0);
 
                 if (now > todayStart && now < todayEnd) {
                     setTimeout(async () => {
                         await searchPage.goto(
                             `${Settings.firstSearchUrl}`
                         );
-                    }, 60000);
+                    }, 30000);
                 } else {
                     setTimeout(async () => {
                         await searchPage.goto(
