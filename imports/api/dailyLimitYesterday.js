@@ -1,6 +1,5 @@
 import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";
-import { check } from "meteor/check";
 import * as fs from "fs";
 import * as path from "path";
 
