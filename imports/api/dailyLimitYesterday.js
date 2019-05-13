@@ -21,24 +21,13 @@ if (Meteor.isServer) {
         }
     } else {
         (async () => {
-            let browser;
-            try {
-                browser = await puppeteer.launch({
-                    timeout: 30000,
-                    ignoreHTTPSErrors: true,
-                    devtools: false,
-                    headless: true,
-                    args: ["--no-sandbox", "--disable-setuid-sandbox"]
-                });
-            } catch (error) {
-                browser = await puppeteer.launch({
-                    timeout: 30000,
-                    ignoreHTTPSErrors: true,
-                    devtools: false,
-                    headless: true,
-                    args: ["--no-sandbox", "--disable-setuid-sandbox"]
-                });
-            }
+            let browser = await puppeteer.launch({
+                timeout: 30000,
+                ignoreHTTPSErrors: true,
+                devtools: false,
+                headless: true,
+                args: ["--no-sandbox", "--disable-setuid-sandbox"]
+            });
 
             const searchPage = await browser.newPage();
 
@@ -53,18 +42,32 @@ if (Meteor.isServer) {
                 let todayEnd = new Date(now).setHours(7, 00, 0, 0);
 
                 if (now > todayStart && now < todayEnd) {
-                    setTimeout(async () => {
-                        await searchPage.goto(`${Settings.firstSearchUrl}`);
+                    setTimeout(() => {
+                        goPage(searchPage, `${Settings.firstSearchUrl}`);
                     }, 30000);
                 } else {
-                    setTimeout(async () => {
-                        await searchPage.goto(`${Settings.firstSearchUrl}`);
+                    setTimeout(() => {
+                        goPage(searchPage, `${Settings.firstSearchUrl}`);
                     }, 5 * 60000);
                 }
             });
 
             await searchPage.goto(`${Settings.firstSearchUrl}`);
         })();
+    }
+
+    async function goPage(searchPage, url) {
+        try {
+            await searchPage.goto(url, {
+                timeout: 15000
+            });
+        } catch (error) {
+            if (error) {
+                setTimeout(() => {
+                    goPage(searchPage, url);
+                }, 30000);
+            }
+        }
     }
 
     function updateDailyLimitYesterday(data) {
