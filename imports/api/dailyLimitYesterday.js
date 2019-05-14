@@ -23,16 +23,21 @@ if (Meteor.isServer) {
     const allDataLen = DailyLimit.find({}).count();
 
     if (allDataLen === 0) {
-        fs.readFile(backupDataPath, (err, result) => {
-            if (err || !result) {
-                console.log(err);
-                return;
-            }
-            const oldData = JSON.parse(result.toString());
-            for (let item of oldData) {
-                DailyLimit.insert(item);
-            }
-        });
+        fs.readFile(
+            backupDataPath,
+            //must wrapped by bindEnvironment when use native callback function
+            Meteor.bindEnvironment((err, result) => {
+                if (err || !result) {
+                    console.log(err);
+                    return;
+                }
+                const oldData = JSON.parse(result.toString());
+
+                for (let item of oldData) {
+                    DailyLimit.insert(item);
+                }
+            })
+        );
     } else {
         (async () => {
             let browser = await puppeteer.launch({
@@ -95,9 +100,7 @@ if (Meteor.isServer) {
 
     async function goPage(searchPage, url) {
         try {
-            await searchPage.goto(url, {
-                timeout: 15000
-            });
+            await searchPage.goto(url);
         } catch (error) {
             if (error) {
                 setTimeout(() => {
@@ -121,7 +124,8 @@ if (Meteor.isServer) {
 
     function updateDailyLimitYesterday(data) {
         const { preClose, trends } = data;
-
+        console.log(trends.length);
+        if (trends.length < 1) return;
         const todayDate =
             trends[0]
                 .slice(0, 10)
@@ -132,7 +136,6 @@ if (Meteor.isServer) {
         const colTodayData = DailyLimit.findOne({
             date: todayDate
         });
-        console.log(trends.length);
 
         if (colTodayData) {
             console.log("update");
