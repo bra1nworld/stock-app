@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import { withTracker } from "meteor/react-meteor-data";
-import { DailyLimit } from "../api/dailyLimitYesterday";
+import { DailyLimit } from "../../api/dailyLimitYesterday";
 import { Meteor } from "meteor/meteor";
 import ReactEcharts from "echarts-for-react";
 
-class App extends Component {
+class DailyLimitChart extends Component {
     constructor(props) {
         super(props);
     }
@@ -21,6 +20,7 @@ class App extends Component {
         if (allDailyLimits.length < 1) return null;
         const xData = [];
         const valueData = [];
+
         allDailyLimits.forEach((limit, index) => {
             const { date, preClose, trends } = limit;
 
@@ -44,7 +44,7 @@ class App extends Component {
         });
 
         return {
-            title: { text: "昨日涨停指数" },
+            title: { text: "昨日涨停指数", x: "center" },
             tooltip: {
                 trigger: "axis",
                 confine: true,
@@ -55,6 +55,10 @@ class App extends Component {
                     const color = value > 0 ? "#FF0000" : "#00FF00";
                     return `<span style="color:${color}">时间:${name}<br/>振幅:${value}</span>`;
                 }
+            },
+            grid: {
+                left: "40",
+                right: "40"
             },
             xAxis: {
                 splitLine: {
@@ -133,7 +137,10 @@ class App extends Component {
         return this.getOptions() ? (
             <ReactEcharts
                 option={this.getOptions()}
-                style={{ height: "600px", width: "1800px" }}
+                style={{
+                    height: "600px",
+                    width: `${window.innerWidth - 280}px`
+                }}
                 className="react_for_echarts"
             />
         ) : (
@@ -145,44 +152,9 @@ class App extends Component {
 export default withTracker(() => {
     Meteor.subscribe("dailyLimit");
     return {
-        dailyLimit: DailyLimit.find({}).fetch()
+        dailyLimit: DailyLimit.find({})
+            .fetch()
+            .sort((a, b) => a.date - b.date)
+            .slice(-30)
     };
-})(App);
-// <div>({curTrend.date})</div>
-// <div>({curTrend.preClose})</div>
-
-// <div>({curTrend.trends.length})</div>
-// <div className="container">
-// <header>
-//   <h1>Todo List ({this.props.incompleteCount})</h1>
-
-//   <label className='hide-completed'>
-//     <input
-//       type='checkbox'
-//       readOnly
-//       checked={this.state.hideCompleted}
-//       onClick={this.toggleHideCompleted}
-//     />
-//   </label>
-
-//   <AccountsUIWrapper />
-
-//   {
-//     this.props.currentUser ?
-
-//       <form className='new-task' onSubmit={this.handleSubmit}>
-//         <input
-//           type='text'
-//           ref='textInput'
-//           placeholder='Type to add new tasks'
-//         />
-//       </form>
-//       : ''
-//   }
-
-// </header>
-
-// <ul>
-//   {this.renderTasks()}
-// </ul>
-// </div></div>
+})(DailyLimitChart);
