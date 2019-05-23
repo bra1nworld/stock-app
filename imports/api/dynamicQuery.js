@@ -221,9 +221,6 @@ if (Meteor.isServer) {
                             date: todayDate
                         });
 
-                        const distanceDateHour =
-                            absPath.indexOf("root") > 0 ? 8 : 0;
-
                         if (colTodayData) {
                             console.log("update");
 
@@ -232,8 +229,7 @@ if (Meteor.isServer) {
                                 $set: {
                                     result,
                                     lastUpdateAt:
-                                        Date.now() -
-                                        distanceDateHour * 60 * 60 * 1000
+                                        Date.now()
                                 }
                             });
                         } else {
@@ -241,8 +237,7 @@ if (Meteor.isServer) {
                             db.insert({
                                 date: todayDate,
                                 lastUpdateAt:
-                                    Date.now() -
-                                    distanceDateHour * 60 * 60 * 1000,
+                                    Date.now()
                                 title,
                                 queryStr,
                                 result
