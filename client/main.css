@@ -6,3 +6,14 @@
 .red {
     color: red;
 }
+table {
+    table-layout: fixed;
+}
+tr > td {
+    padding: 10px 0 !important;
+}
+.concept {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

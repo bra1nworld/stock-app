@@ -1,6 +1,5 @@
 import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";
-import * as fs from "fs";
 import * as path from "path";
 const puppeteer = require("puppeteer");
 const Settings = {
