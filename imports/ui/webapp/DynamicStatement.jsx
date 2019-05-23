@@ -36,8 +36,7 @@ class DynamicStatement extends React.Component {
 
     renderDailyLimit() {}
 
-    componentDidMount() {
-    }
+    componentDidMount() {}
     getLinks = () => {
         return Object.keys(queryObj).map((key, index) => {
             return (
@@ -56,7 +55,7 @@ class DynamicStatement extends React.Component {
 
             const { lastUpdateAt, result, title } = this.props[key][0];
             const { dealData, queryStr, DLCol } = queryObj[key];
-            
+
             const data = dealData(result);
             return (
                 <div id={key} key={"table-" + key}>
@@ -64,7 +63,7 @@ class DynamicStatement extends React.Component {
                         style={{ fontSize: 20, color: "red" }}
                         className="anchor"
                     >
-                        {title}
+                        {title}({data.length})
                     </div>
                     <div>
                         最后更新时间:
@@ -75,7 +74,7 @@ class DynamicStatement extends React.Component {
                     </div>
                     <div>查询语句: {queryStr}</div>
                     <Table
-                        columns={DLCol?DLColumns:columns}
+                        columns={DLCol ? DLColumns : columns}
                         dataSource={data}
                         scroll={{ x: window.innerWidth - 400, y: 600 }}
                         pagination={{ pageSize: data.length }}
