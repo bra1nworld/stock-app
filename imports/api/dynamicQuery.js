@@ -185,12 +185,14 @@ if (Meteor.isServer) {
                     resJson = await res.json();
                 } catch (error) {
                     if (!resJson || error) {
-                        goPage(
-                            searchPage,
-                            `${Settings.firstSearchUrl}${encodeURI(queryStr)}${
-                                Settings.lastSearchUrl
-                            }`
-                        );
+                        setTimeout(() => {
+                            goPage(
+                                searchPage,
+                                `${Settings.firstSearchUrl}${encodeURI(
+                                    queryStr
+                                )}${Settings.lastSearchUrl}`
+                            );
+                        }, 10 * 1000);
                         return;
                     }
                 }

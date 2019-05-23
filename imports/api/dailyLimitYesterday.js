@@ -37,7 +37,9 @@ if (Meteor.isServer) {
                 resText = await res.text();
             } catch (error) {
                 if (!resText || error) {
-                    goPage(searchPage, `${Settings.firstSearchUrl}`);
+                    setTimeout(() => {
+                        goPage(searchPage, `${Settings.firstSearchUrl}`);
+                    }, 10000);
                     return;
                 }
             }
