@@ -46,8 +46,14 @@ if (Meteor.isServer) {
             updateDailyLimitYesterday(resJson.data);
 
             const now = Date.now();
+            console.log(" Date.now()");
+            console.log(Date.now());
+
             let todayStart = new Date(now).setHours(startDateHour, 25, 0, 0);
             let todayEnd = new Date(now).setHours(startDateHour + 6, 00, 0, 0);
+            console.log("todayStart");
+            console.log(todayStart);
+
             let todayUpdateLastTime = new Date(now).setHours(
                 startDateHour + 6,
                 10,
