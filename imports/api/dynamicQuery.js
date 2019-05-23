@@ -228,16 +228,14 @@ if (Meteor.isServer) {
                             db.update(_id, {
                                 $set: {
                                     result,
-                                    lastUpdateAt:
-                                        Date.now()
+                                    lastUpdateAt: Date.now()
                                 }
                             });
                         } else {
                             console.log("insert");
                             db.insert({
                                 date: todayDate,
-                                lastUpdateAt:
-                                    Date.now()
+                                lastUpdateAt: Date.now(),
                                 title,
                                 queryStr,
                                 result
