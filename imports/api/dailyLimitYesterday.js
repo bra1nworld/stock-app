@@ -32,7 +32,15 @@ if (Meteor.isServer) {
         const searchPage = await browser.newPage();
 
         searchPage.on("response", async res => {
-            const resText = await res.text();
+            let resText;
+            try {
+                resText = await res.text();
+            } catch (error) {
+                if (!resText || error) {
+                    goPage(searchPage, `${Settings.firstSearchUrl}`);
+                    return;
+                }
+            }
             const resultJsonStr = resText.match(/[^\(\)]+(?=\))/g)[0];
             const resJson = JSON.parse(resultJsonStr);
             updateDailyLimitYesterday(resJson.data);
