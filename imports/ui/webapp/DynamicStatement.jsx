@@ -1,6 +1,8 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Anchor, Table } from "antd";
+import { Anchor, Table, Menu, Layout } from "antd";
+const { Sider } = Layout;
+
 import { withTracker } from "meteor/react-meteor-data";
 import { Helper } from "./helper";
 import {
@@ -33,28 +35,58 @@ class DynamicStatement extends React.Component {
     constructor(props) {
         super(props);
     }
-
+    state = {
+        curKey: "queryAttack"
+    };
     renderDailyLimit() {}
 
     componentDidMount() {}
-    getLinks = () => {
+
+    onClickMenu = e => {
+        const { key } = e;
+        this.setState({ curKey: key });
+    };
+
+    getMenuItems = () => {
         return Object.keys(queryObj).map((key, index) => {
             return (
-                <Link
-                    key={"link" + index}
-                    href={"#" + key}
-                    title={queryObj[key].title}
-                />
+                <Menu.Item key={key}>
+                    <span>{queryObj[key].title}</span>
+                </Menu.Item>
             );
         });
     };
 
-    getTables = () => {
-        return Object.keys(this.props).map((key, index) => {
-            if (this.props[key].length <= 0) return null;
+    getTables = (key = "queryAttack") => {
+        const { dealData, queryStr, DLCol, title } = queryObj[key];
 
-            const { lastUpdateAt, result, title } = this.props[key][0];
-            const { dealData, queryStr, DLCol } = queryObj[key];
+        if (this.props[key].length <= 0) {
+            return (
+                <div id={key} key={"table-" + key}>
+                    <div
+                        style={{ fontSize: 20, color: "red" }}
+                        className="anchor"
+                    >
+                        {title}(0)
+                    </div>
+                    <div>最后更新时间:</div>
+                    <div>查询语句: {queryStr}</div>
+                    <Table
+                        key={"table" + key}
+                        columns={DLCol ? DLColumns : columns}
+                        dataSource={[]}
+                        scroll={{ x: window.innerWidth - 400, y: 600 }}
+                        pagination={{ pageSize: 0 }}
+                    />
+                </div>
+            );
+        } else {
+            const {
+                lastUpdateAt,
+                result,
+                title,
+                lastUpdateInterval
+            } = this.props[key][0];
 
             const data = dealData(result);
             return (
@@ -72,8 +104,15 @@ class DynamicStatement extends React.Component {
                             new Date(lastUpdateAt)
                         )}
                     </div>
-                    <div>查询语句: {queryStr}</div>
+                    <div className="red">
+                        上一次更新时间间隔:
+                        {~~(lastUpdateInterval / 1000) + "s"}
+                    </div>
+                    <div style={{ marginBottom: "20px" }}>
+                        查询语句: {queryStr}
+                    </div>
                     <Table
+                        key={"table" + key}
                         columns={DLCol ? DLColumns : columns}
                         dataSource={data}
                         scroll={{ x: window.innerWidth - 400, y: 600 }}
@@ -81,18 +120,38 @@ class DynamicStatement extends React.Component {
                     />
                 </div>
             );
-        });
+        }
     };
     render() {
         return (
             <>
-                <div style={{ position: "absolute" }}>
-                    <Anchor style={{ width: "150px" }}>
-                        {this.getLinks()}
-                    </Anchor>
+                <div id="dynamicLayout" style={{ position: "absolute" }}>
+                    <Layout style={{ minHeight: "100vh" }}>
+                        <Sider
+                            style={{
+                                overflow: "auto",
+                                height: "100vh",
+                                position: "fixed",
+                                maxWidth: "120px",
+                                minWidth: "120px",
+                                width: "120px"
+                            }}
+                        >
+                            <Menu
+                                theme="white"
+                                defaultSelectedKeys={["1"]}
+                                mode="inline"
+                                onClick={this.onClickMenu}
+                            >
+                                {this.getMenuItems()}
+                            </Menu>
+                        </Sider>
+                    </Layout>
                 </div>
 
-                <div style={{ marginLeft: "200px" }}>{this.getTables()}</div>
+                <div style={{ marginLeft: "150px" }}>
+                    {this.getTables(this.state.curKey)}
+                </div>
             </>
         );
     }
@@ -372,6 +431,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     curPrice: item[2][0],
@@ -398,6 +458,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     curPrice: item[2],
@@ -424,6 +485,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     curPrice: item[2],
@@ -450,6 +512,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     curPrice: item[2],
@@ -476,6 +539,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     curPrice: item[2],
@@ -503,6 +567,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[2] * 1,
@@ -532,6 +597,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[2] * 1,
@@ -561,21 +627,22 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
-                    firstDLTime: item[13] * 1,
-                    finalDLTime: item[16] * 1,
-                    curPrice: item[2],
-                    rise: item[3] * 1,
-                    bidVol: ~~(item[4] * 100) / 100,
-                    bidCount: ~~(item[5] / 10000),
-                    bidRize: ~~(item[6] * 100) / 100,
-                    dayVol: ~~(item[7] / 10000),
-                    changeRate: ~~item[8],
-                    DLDaysCount: item[9][0],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
-                    concept: item[11]
+                    firstDLTime: item[2] * 1,
+                    finalDLTime: item[5] * 1,
+                    curPrice: item[15],
+                    rise: item[14] * 1,
+                    bidVol: ~~(item[13] * 100) / 100,
+                    bidCount: ~~(item[12] / 10000),
+                    bidRize: ~~(item[11] * 100) / 100,
+                    dayVol: ~~(item[10] / 10000),
+                    changeRate: ~~item[9],
+                    DLDaysCount: item[4],
+                    DLReason: item[8][0],
+                    DLYReason: item[8][1],
+                    concept: item[7]
                 });
             });
             return finalData;
@@ -590,6 +657,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[2] * 1,
@@ -619,6 +687,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[2] * 1,
@@ -648,21 +717,22 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
-                    firstDLTime: item[13] * 1,
-                    finalDLTime: item[16] * 1,
-                    curPrice: item[2],
-                    rise: item[3] * 1,
-                    bidVol: ~~(item[4] * 100) / 100,
-                    bidCount: ~~(item[5] / 10000),
-                    bidRize: ~~(item[6] * 100) / 100,
-                    dayVol: ~~(item[7] / 10000),
-                    changeRate: ~~item[8],
-                    DLDaysCount: item[9][0],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
-                    concept: item[11]
+                    firstDLTime: item[2] * 1,
+                    finalDLTime: item[5] * 1,
+                    curPrice: item[15],
+                    rise: item[14] * 1,
+                    bidVol: ~~(item[13] * 100) / 100,
+                    bidCount: ~~(item[12] / 10000),
+                    bidRize: ~~(item[11] * 100) / 100,
+                    dayVol: ~~(item[10] / 10000),
+                    changeRate: ~~item[9],
+                    DLDaysCount: item[4],
+                    DLReason: item[8][0],
+                    DLYReason: item[8][1],
+                    concept: item[7]
                 });
             });
             return finalData;
@@ -677,6 +747,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[13] * 1,
@@ -706,6 +777,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[13] * 1,
@@ -734,6 +806,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     curPrice: item[2],
@@ -761,6 +834,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[13] * 1,
@@ -790,6 +864,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[13] * 1,
@@ -819,6 +894,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[13] * 1,
@@ -848,6 +924,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[13] * 1,
@@ -877,6 +954,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[13] * 1,
@@ -906,6 +984,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     firstDLTime: item[13] * 1,
@@ -934,6 +1013,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     curPrice: item[2],
@@ -960,6 +1040,7 @@ const queryObj = {
             const finalData = [];
             arr.forEach((item, index) => {
                 finalData.push({
+                    key: index,
                     id: item[0],
                     name: item[1],
                     curPrice: item[2],

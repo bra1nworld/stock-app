@@ -1,3 +1,4 @@
+require("events").EventEmitter.defaultMaxListeners = 0;
 import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";
 import * as path from "path";
@@ -185,18 +186,15 @@ if (Meteor.isServer) {
                     resJson = await res.json();
                 } catch (error) {
                     if (!resJson || error) {
-                        setTimeout(() => {
-                            goPage(
-                                searchPage,
-                                `${Settings.firstSearchUrl}${encodeURI(
-                                    queryStr
-                                )}${Settings.lastSearchUrl}`
-                            );
-                        }, 10 * 1000);
+                        goPage(
+                            searchPage,
+                            `${Settings.firstSearchUrl}${encodeURI(queryStr)}${
+                                Settings.lastSearchUrl
+                            }`
+                        );
                         return;
                     }
                 }
-                console.log("---resJson---");
                 const { oriIndexID, result, data } = resJson;
 
                 if (data) {
@@ -211,7 +209,6 @@ if (Meteor.isServer) {
                     );
                 } else if (oriIndexID) {
                     //second search
-                    console.log(result.length);
                     const now = new Date();
 
                     if (result.length > 0) {
@@ -224,17 +221,16 @@ if (Meteor.isServer) {
                         });
 
                         if (colTodayData) {
-                            console.log("update");
-
                             const _id = colTodayData._id;
                             db.update(_id, {
                                 $set: {
                                     result,
-                                    lastUpdateAt: Date.now()
+                                    lastUpdateAt: Date.now(),
+                                    lastUpdateInterval:
+                                        Date.now() - colTodayData.lastUpdateAt
                                 }
                             });
                         } else {
-                            console.log("insert");
                             db.insert({
                                 date: todayDate,
                                 lastUpdateAt: Date.now(),
@@ -260,12 +256,14 @@ if (Meteor.isServer) {
                     );
 
                     if (now > todayStart && now < todayEnd) {
+                        // setTimeout(() => {
                         goPage(
                             searchPage,
                             `${Settings.firstSearchUrl}${encodeURI(queryStr)}${
                                 Settings.lastSearchUrl
                             }`
                         );
+                        // }, 5000);
                     } else {
                         setTimeout(() => {
                             goPage(

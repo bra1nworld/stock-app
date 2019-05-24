@@ -60,13 +60,13 @@ export default class SiderLayout extends React.Component {
                             style={{
                                 padding: 24,
                                 background: "#fff",
-                                minHeight: 360
+                                minHeight: 360,
+                                height: "100%"
                             }}
                         >
                             {this.renderContent(this.state.curKey)}
                         </div>
                     </Content>
-                    <Footer style={{ textAlign: "center" }} />
                 </Layout>
             </Layout>
         );
