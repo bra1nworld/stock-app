@@ -47,10 +47,10 @@ export default class SiderLayout extends React.Component {
                             <Icon type="line-chart" />
                             <span>昨日涨停指数</span>
                         </Menu.Item>
-                        <Menu.Item key="2">
+                        {/* <Menu.Item key="2">
                             <Icon type="file-search" />
                             <span>动态语句查询</span>
-                        </Menu.Item>
+                        </Menu.Item> */}
                     </Menu>
                 </Sider>
                 <Layout style={{ marginLeft: 200 }}>
