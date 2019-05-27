@@ -39,7 +39,7 @@ class DailyLimitChart extends Component {
                 });
             });
             for (let i = 0; i < 241; i++) {
-                xData.push(date + "");
+                xData.push((date + "").slice(4));
             }
         });
 
