@@ -152,7 +152,7 @@ class DailyLimitChart extends Component {
 export default withTracker(() => {
     Meteor.subscribe("dailyLimit");
     return {
-        dailyLimit: DailyLimit.find({}, { sort: { _id: -1 }, limit: 30 })
+        dailyLimit: DailyLimit.find({}, { sort: { date: -1 }, limit: 30 })
             .fetch()
             .sort((a, b) => a.date - b.date)
     };
