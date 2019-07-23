@@ -17,7 +17,9 @@ export const DailyLimit = new Mongo.Collection("dailyLimit");
 
 if (Meteor.isServer) {
     Meteor.publish("dailyLimit", function dailyLimitPublication() {
-        return DailyLimit.find({}, { sort: { date: -1 }, limit: 30 });
+        return DailyLimit.find({}, { sort: { date: -1 }, limit: 30 })
+            .fetch()
+            .sort((a, b) => a.date - b.date);
     });
 
     (async () => {
