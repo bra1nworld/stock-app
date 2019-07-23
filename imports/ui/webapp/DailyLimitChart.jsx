@@ -153,7 +153,7 @@ export default withTracker(() => {
     Meteor.subscribe("dailyLimit");
 
     return {
-        dailyLimit: DailyLimit.find({})
+        dailyLimit: DailyLimit.find({}, { sort: { date: -1 } })
             .fetch()
             .sort((a, b) => a.date - b.date)
     };
