@@ -127,6 +127,7 @@ class DailyLimitChart extends Component {
                 {
                     name: "数据",
                     type: "line",
+                    animation: false,
                     data: valueData
                 }
             ]
