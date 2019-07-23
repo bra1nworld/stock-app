@@ -11,11 +11,11 @@ const SubMenu = Menu.SubMenu;
 
 export default class SiderLayout extends React.Component {
     contentConfig = {
-        "1": <DailyLimitChart />,
+        // "1": <DailyLimitChart />,
         "2": <DynamicStatement />
     };
     state = {
-        curKey: "1"
+        curKey: "2"
     };
 
     onClickMenu = e => {
@@ -39,13 +39,17 @@ export default class SiderLayout extends React.Component {
                     <div className="logo" />
                     <Menu
                         theme="dark"
-                        defaultSelectedKeys={["1"]}
+                        defaultSelectedKeys={["2"]}
                         mode="inline"
                         onClick={this.onClickMenu}
                     >
-                        <Menu.Item key="1">
+                        {/* <Menu.Item key="1">
                             <Icon type="line-chart" />
                             <span>昨日涨停指数</span>
+                        </Menu.Item> */}
+                        <Menu.Item key="2">
+                            <Icon type="line-chart" />
+                            <span>动态语句查询</span>
                         </Menu.Item>
                     </Menu>
                 </Sider>

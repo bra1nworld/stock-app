@@ -256,14 +256,14 @@ if (Meteor.isServer) {
                     );
 
                     if (now > todayStart && now < todayEnd) {
-                        // setTimeout(() => {
+                        setTimeout(() => {
                         goPage(
                             searchPage,
                             `${Settings.firstSearchUrl}${encodeURI(queryStr)}${
                                 Settings.lastSearchUrl
                             }`
                         );
-                        // }, 5000);
+                        }, 5000);
                     } else {
                         setTimeout(() => {
                             goPage(
@@ -272,7 +272,7 @@ if (Meteor.isServer) {
                                     queryStr
                                 )}${Settings.lastSearchUrl}`
                             );
-                        }, 10 * 60000);
+                        }, 10*6000);
                     }
                 }
             }

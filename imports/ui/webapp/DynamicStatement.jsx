@@ -172,6 +172,8 @@ export default withTracker(() => {
     });
 
     Meteor.subscribe("queryAttack");
+    console.log(result);
+    
     return result;
 })(DynamicStatement);
 
@@ -442,8 +444,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason:(typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -469,8 +471,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -496,8 +498,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason:(typeof item[10] === 'string')?item[10]:  item[10][1],
                     concept: item[11]
                 });
             });
@@ -523,8 +525,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason:(typeof item[10] === 'string')?item[10]:  item[10][0],
+                    DLYReason:(typeof item[10] === 'string')?item[10]:  item[10][1],
                     concept: item[11]
                 });
             });
@@ -550,8 +552,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason:(typeof item[10] === 'string')?item[10]:  item[10][1],
                     concept: item[11]
                 });
             });
@@ -580,8 +582,8 @@ const queryObj = {
                     dayVol: ~~(item[11] / 10000),
                     changeRate: ~~item[10],
                     DLDaysCount: item[9],
-                    DLReason: item[8][0],
-                    DLYReason: item[8][1],
+                    DLReason: (typeof item[8] === 'string')?item[8]: item[8][0],
+                    DLYReason: (typeof item[8] === 'string')?item[8]: item[8][1],
                     concept: item[7]
                 });
             });
@@ -610,8 +612,8 @@ const queryObj = {
                     dayVol: ~~(item[10] / 10000),
                     changeRate: ~~item[9],
                     DLDaysCount: item[4],
-                    DLReason: item[8][0],
-                    DLYReason: item[8][1],
+                    DLReason: (typeof item[8] === 'string')?item[8]: item[8][0],
+                    DLYReason: (typeof item[8] === 'string')?item[8]: item[8][1],
                     concept: item[7]
                 });
             });
@@ -640,8 +642,8 @@ const queryObj = {
                     dayVol: ~~(item[10] / 10000),
                     changeRate: ~~item[9],
                     DLDaysCount: item[4],
-                    DLReason: item[8][0],
-                    DLYReason: item[8][1],
+                    DLReason: (typeof item[8] === 'string')?item[8]: item[8][0],
+                    DLYReason:(typeof item[8] === 'string')?item[8]:  item[8][1],
                     concept: item[7]
                 });
             });
@@ -670,8 +672,8 @@ const queryObj = {
                     dayVol: ~~(item[10] / 10000),
                     changeRate: ~~item[9],
                     DLDaysCount: item[4],
-                    DLReason: item[8][0],
-                    DLYReason: item[8][1],
+                    DLReason: (typeof item[8] === 'string')?item[8]: item[8][0],
+                    DLYReason:(typeof item[8] === 'string')?item[8]:  item[8][1],
                     concept: item[7]
                 });
             });
@@ -700,8 +702,8 @@ const queryObj = {
                     dayVol: ~~(item[10] / 10000),
                     changeRate: ~~item[9],
                     DLDaysCount: item[4],
-                    DLReason: item[8][0],
-                    DLYReason: item[8][1],
+                    DLReason: (typeof item[8] === 'string')?item[8]: item[8][0],
+                    DLYReason: (typeof item[8] === 'string')?item[8]: item[8][1],
                     concept: item[7]
                 });
             });
@@ -730,8 +732,8 @@ const queryObj = {
                     dayVol: ~~(item[10] / 10000),
                     changeRate: ~~item[9],
                     DLDaysCount: item[4],
-                    DLReason: item[8][0],
-                    DLYReason: item[8][1],
+                    DLReason: (typeof item[8] === 'string')?item[8]: item[8][0],
+                    DLYReason: (typeof item[8] === 'string')?item[8]: item[8][1],
                     concept: item[7]
                 });
             });
@@ -760,8 +762,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9][0],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason:(typeof item[10] === 'string')?item[10]:  item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -790,8 +792,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason:(typeof item[10] === 'string')?item[10]:  item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -817,8 +819,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -847,8 +849,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -877,8 +879,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9][0],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -907,8 +909,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9][0],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -937,8 +939,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9][0],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason:(typeof item[10] === 'string')?item[10]:  item[10][1],
                     concept: item[11]
                 });
             });
@@ -967,8 +969,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9][0],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason:(typeof item[10] === 'string')?item[10]:  item[10][1],
                     concept: item[11]
                 });
             });
@@ -997,8 +999,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9][0],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -1024,8 +1026,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason: (typeof item[10] === 'string')?item[10]: item[10][1],
                     concept: item[11]
                 });
             });
@@ -1051,8 +1053,8 @@ const queryObj = {
                     dayVol: ~~(item[7] / 10000),
                     changeRate: ~~item[8],
                     DLDaysCount: item[9],
-                    DLReason: item[10][0],
-                    DLYReason: item[10][1],
+                    DLReason: (typeof item[10] === 'string')?item[10]: item[10][0],
+                    DLYReason:(typeof item[10] === 'string')?item[10]:  item[10][1],
                     concept: item[11]
                 });
             });
